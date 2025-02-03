@@ -1,12 +1,9 @@
-from pyrogram import Client
+async def get_content(client, message):
+    chat_id = message.text.split('/')[-1]
+    posts = await client.get_messages(chat_id, range(100, 120))
+    for post in posts:
+        await client.copy_message(message.chat.id, post.chat.id, post.id)
 
-async def login(client: Client, message):
-    phone_number = message.text.split()[1]
-    await client.send_code(phone_number)
-    code = await get_user_input("Enter the code you received:")
-    await client.sign_in(phone_number, code)
-    session_string = await client.export_session_string()
-    # Store session_string securely
-
-async def logout(client: Client, message):
-    await client.log_out()
+async def download_media(client, message):
+    media = await client.download_media(message)
+    # Handle media (e.g., save to storage)
